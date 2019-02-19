@@ -1,0 +1,73 @@
+package Practica1_Unidad2;
+
+public class equipo 
+{
+	private String nombre;
+	private int precio;
+	private int tiempo;
+	private equipo siguiente;  //"siguiente" es un puntero al siguiente nodo
+	private int aproximacion;
+	
+	public equipo(String nombre, int precio, int tiempo)
+	{
+		this.nombre = nombre;
+		this.precio = precio;
+		this.tiempo = tiempo;
+	}
+	
+	/*---------- NOMBRE ----------*/
+	public void setNombre(String nombre)
+	{
+		this.nombre = nombre;
+	}
+	
+	public String getNombre()
+	{
+		return nombre;
+	}
+	
+	/*---------- PRECIO ----------*/
+	public void setPrecio(int precio)
+	{
+		this.precio = precio;
+	}
+	
+	public int getPrecio()
+	{
+		return precio;
+	}
+	
+	/*---------- TIEMPO ----------*/
+	public void setTiempo(int tiempo)
+	{
+		this.tiempo = tiempo;
+	}
+	
+	public int getTiempo()
+	{
+		return tiempo;
+	}
+	
+	/*---------- NODO ----------*/
+	//Conectar un nodo con otro
+	public void setSiguiente(equipo temp)  //Enlazamiento de los nodos
+	{
+		this.siguiente = temp;
+	}
+	
+	public equipo getSiguiente() //Recorrido de la lista
+	{
+		return this.siguiente;
+	}
+	
+	/*---------- Aproximacion ----------*/
+	public void setAproximacion(int aproximacion)
+	{
+		this.aproximacion = aproximacion;
+	}
+
+	public int getAproximacion()
+	{
+		return aproximacion;
+	}
+}
