@@ -1,0 +1,188 @@
+package Practica1_Unidad2;
+
+import javax.swing.*;
+
+import java.util.*;
+
+public class colaEquipos 
+{
+	private equipo head;
+	private int size; //Para saber el tamaño de la cola
+	
+	public colaEquipos()
+	{
+		this.head = null;
+		this.size = 0;
+	}
+	
+//-------------------------------------- MAIN ----------------------------------------------------
+	public static void main(String[] args)
+	{
+		String op = "si";
+		
+		String nombre; //Sirve para el nombre del equipo
+		int precio;    //Sirve para el precio propuesto por el equipo
+		int tiempo;    //Sirve para el tiempo tardado por el equipo
+		int num_premios, conta = 0, num_equipos = 0, ronda = 0; 
+		/* 1.- num_premios: Sirve para almacenar el numero de premios en juego y, por ende, las rondas todales. Sirve como iterador para el 
+		                   Ciclo for principal
+		   2.- conta: Solo sirve para ennumerar a los equipos, asi cuando muestre el mensaje dira: Equipo 1, Equipo 2, ... Equipo n
+		   3.- num_equipos: Sirve para poder darle dimension al arreglo "aux_precio", el cual se encargara de guardar los precios mencionados
+		                    por cada equipo
+		   4.- ronda: Sirve solo para ennumerar las rondas por cada vuelta
+		*/
+		
+		colaEquipos cola = new colaEquipos(); /*Se instancia un objeto del tipo de esta misma clase para poder hacer pases de parametros
+				                              y llamados de las funciones que se encuentran en esta misma clase */
+		
+		num_premios = Integer.parseInt(JOptionPane.showInputDialog(null, "Numero de premios en juego: "));
+		
+/* ---------------- RONDAS -------------------------*/
+//PENSAR EN COMO PONER EN UN ARREGLO A LOS EQUIPOS**
+		
+		for(int i=0; i<num_premios; i++)
+		{
+			ronda++;
+			int precio_articulo = (int)(Math.random()*1000); /*Iniciando el precio del articulo por cada ronda*/
+			
+			JOptionPane.showMessageDialog(null, "RONDA " + ronda);
+			JOptionPane.showMessageDialog(null, "Precio del articulo: " + precio_articulo);
+			
+			while(op.equals("si"))
+			{
+				conta++;
+				num_equipos++;
+				
+				nombre = JOptionPane.showInputDialog(null, "Nombre del equipo " + conta + ":");
+				precio = Integer.parseInt(JOptionPane.showInputDialog(null, "Precio propuesto: "));
+				tiempo = Integer.parseInt(JOptionPane.showInputDialog(null, "Tiempo tardado: "));
+				JOptionPane.showMessageDialog(null, "Se ha generado el equipo exitosamente");
+				
+				//PASE DE LOS DATOS
+				cola.agrega(nombre, precio, tiempo);
+				
+				op = JOptionPane.showInputDialog(null, "¿Desea agregar a otro equipo?");
+			}//FIN WHILE
+			cola.aproximacion(precio_articulo);
+			
+			cola.ganador(precio_articulo, num_equipos);
+		}//FIN for
+	}//FIN main
+	
+//------------------------------------------------------------------------------------------------
+	public boolean vacio()
+	{
+		if(size == 0) return true;
+		else return false;
+	}
+	
+	
+// -------------------------- AGREGACION DE LOS VALORES ------------------------------------------
+	public void agrega(String nombre, int precio, int tiempo)
+	{
+		if(vacio())
+		{
+			head = new equipo(nombre, precio, tiempo); //Se crea un nuevo equipo
+		    size++;	
+		}
+		else
+		{
+			equipo temp = head; //GUARDANDO LA CABEZA
+			
+			equipo nuevo = new equipo(nombre, precio, tiempo);  //CREACION DE UN NUEVO EQUIPO
+			
+			size++;
+			
+			while(temp.getSiguiente() != null) temp = temp.getSiguiente();
+			
+		    temp.setSiguiente(nuevo);  //Enlazamiento del equipo con el nuevo equipo   	    
+		}
+	}//fin agrega
+	
+	
+//------------------------------------ IMPRIME Y COMPARA--------------------------------------------------
+	public void ganador(int precio_articulo, int num_equipos)  //Aqui mismo se puede hacer la funcion de comparacion para ver al equipo ganador
+	{
+		equipo temp = head;
+		int aux_num_equipos = num_equipos;  //Esto se hace para que se le pueda pasar al algoritmo de ordenamiento el numero de elementos
+		//int aux_tiempo[]; aux_tiempo = new int [num_equipos];  
+		
+		// IMPRIMIENDO LOS EQUIPOS
+		for(int i=0; i<size; i++)
+		{
+			System.out.println("Equipo " + (i+1) + ":");
+			System.out.println("Nombre: " + temp.getNombre());
+			System.out.println("Precio propuesto: " + temp.getPrecio());
+			System.out.println("Tiempo: " + temp.getTiempo());
+			System.out.println("Aproximacion: " + temp.getAproximacion());
+			//aux_tiempo[i] = temp.getTiempo();
+			System.out.println("\n");
+			
+			temp = temp.getSiguiente();  //Recorriendo la lista
+		}
+		
+// ------------------------------------ LLENADO DEL ARRAY ---------------------------------------------		
+		// ORDENAMIENTO EN BASE A LA APROXIMACION QUE TUVIERON CON EL PRECIO
+		ArrayList<String> ord = new ArrayList<String>();
+		
+		//Llenado de la lista
+	    equipo temp2 = head;
+	    for(int i=0; i<size; i++)
+	    {
+	    	ord.add(temp2.getNombre());  //Agrega el siguiente equipo a la lista
+	    	temp2 = temp2.getSiguiente(); //Recorrer la lista
+	    }
+	   
+	    Iterator<String> conta = ord.iterator(); 
+	    //Se declara un tipo "Iterator" para poder imprimir la lista con un bucle
+	    
+	    //Impresión de la lista
+	    while(conta.hasNext())
+	    {
+	    	System.out.println(conta.next());
+	    }
+	
+		
+// --------------------------------------------------- ORDENAMIENTO ------------------------------------------------------------
+	    int min, aux;
+		equipo temp3 = head;
+		equipo temp4 = head;
+		
+		for(int i=0; i<size; i++)
+		{
+			min = i;
+			for(int j = i+1; j<size; j++)
+			{
+				if(temp3.getAproximacion() < temp4.getAproximacion())
+				{
+					aux = ord.get(i).;
+					ord.indexOf(i) = ord.get(min);
+					ord.indexOf(min) = aux;
+				}
+			}
+		}
+		
+
+// ------------------------------------------------------ GANADOR --------------------------------------------------------------
+		/*Ordenar este arreglo, y al final tomar el valor mas pequeño (el primerito).
+		 * Declarar una variable auxiliar que sea igual a el primer valor, y luego, recorrer la lista de arriba. 
+		 * Si ese valor es igual al de una posicion entonces ese es el equipo mas cercano y, por ende, el ganador
+		 */
+		
+	}//FIN ganador
+	
+	
+// --------------------------------- APROXIMACION DEL PRECIO POR EQUIPO -------------------------------------------------
+	public void aproximacion(int precio_articulo)
+	{
+		equipo temp = head;
+		
+		for(int i=0; i<size; i++)
+		{
+			temp.setAproximacion(Math.abs(precio_articulo - temp.getPrecio()));
+			
+			temp = temp.getSiguiente();  //Recorriendo la lista
+		}
+	}
+	
+}//fin colasEquipos
